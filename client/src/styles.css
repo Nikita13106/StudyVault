@@ -1,0 +1,246 @@
+:root {
+  --bg: #faf8f3;          /* warm paper */
+  --card: #ffffff;
+  --text: #1c1b18;        /* near-black ink */
+  --muted: #7c766c;
+  --accent: #126e63;      /* deep teal */
+  --accent-hover: #0d544b;
+  --accent-soft: #e7f1ef;
+  --border: #e9e3d8;
+  --error: #b3261e;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(28, 27, 24, 0.04), 0 4px 16px rgba(28, 27, 24, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 5rem;
+}
+
+/* ---------- Header ---------- */
+.header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.header h1 {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.tagline {
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+
+/* ---------- Upload card ---------- */
+.upload-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 3rem;
+}
+.upload-card h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+input[type="file"] {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  color: var(--muted);
+}
+input[type="file"]::file-selector-button {
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  margin-right: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+input[type="file"]::file-selector-button:hover {
+  background: #d9ebe8;
+}
+
+textarea {
+  width: 100%;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem;
+  resize: vertical;
+  margin-bottom: 1.25rem;
+  background: #fdfcfa;
+}
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ---------- Buttons ---------- */
+button,
+.download-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.4rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+button:hover:not(:disabled),
+.download-btn:hover {
+  background: var(--accent-hover);
+}
+button:active:not(:disabled),
+.download-btn:active {
+  transform: translateY(1px);
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- Feed ---------- */
+.feed-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+.feed-head h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+.count {
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+}
+
+.resource-list {
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.resource-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.3s ease; /* bonus: subtle entry animation */
+}
+.resource-desc {
+  font-weight: 500;
+}
+.resource-meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 0.3rem;
+}
+.download-btn {
+  font-size: 0.85rem;
+  padding: 0.55rem 1.1rem;
+  white-space: nowrap;
+}
+
+/* ---------- States ---------- */
+.muted {
+  color: var(--muted);
+}
+.error {
+  color: var(--error);
+  font-size: 0.9rem;
+  margin-bottom: 0.85rem;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 3.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 2.25rem;
+  }
+  .resource-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .download-btn {
+    align-self: stretch;
+    text-align: center;
+  }
+}

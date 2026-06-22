@@ -4,6 +4,7 @@ import cors from "cors";
 
 import connectDB from "./config/db.js";
 import resourceRoutes from "./routes/resources.js";
+import authRoutes from "./routes/auth.js";
 
 // Load environment variables before anything else uses them.
 dotenv.config();
@@ -18,10 +19,10 @@ app.use(express.json());
 
 // --- Routes ---
 app.use("/api", resourceRoutes);
+app.use("/api/auth", authRoutes);
 
 // Simple health check.
 app.get("/", (req, res) => res.send("StudyVault API is running 🚀"));
-
 /**
  * Global error handler.
  * Catches file-size / file-type errors thrown by the upload middleware

@@ -19,8 +19,34 @@ const toDownloadUrl = (url) =>
     ? url.replace("/upload/", "/upload/fl_attachment/")
     : url;
 
-export default function ResourceCard({ resource }) {
-  const { description, fileName, fileSize, fileUrl, createdAt } = resource;
+export default function ResourceCard({ resource, onDelete }) {
+  const { _id, description, fileName, fileSize, fileUrl, createdAt, user } =
+    resource;
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/resource/${_id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+
+      onDelete(_id); // 🔥 remove from UI
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   return (
     <li className="resource-card">
@@ -28,19 +54,42 @@ export default function ResourceCard({ resource }) {
         <p className="resource-desc">{description}</p>
         <p className="resource-meta">
           {fileName}
-          {fileSize ? ` · ${formatSize(fileSize)}` : ""} ·{" "}
+          {fileSize ? ` · ${formatSize(fileSize)}` : ""}
+
+          {" · "}
+          {resource.user?.name || "Unknown"}
+          {" · "}
           {new Date(createdAt).toLocaleDateString()}
         </p>
       </div>
 
-      <a
-        className="download-btn"
-        href={toDownloadUrl(fileUrl)}
-        // target="_blank"  --- not needed since we're forcing a download so we don,t need to open a new tab 
-        // rel="noopener noreferrer"  ... also not needed without target="_blank"
-      >
-        Download
-      </a>
+      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+        <a
+          className="download-btn"
+          href={fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download
+        </a>
+
+        {/* 🔥 Delete only if owner */}
+        {user?._id === localStorage.getItem("userId") && (
+          <button
+            onClick={handleDelete}
+            style={{
+              background: "#b3261e",
+              color: "#fff",
+              border: "none",
+              borderRadius: "8px",
+              padding: "6px 10px",
+              cursor: "pointer",
+            }}
+          >
+            Delete
+          </button>
+        )}
+      </div>
     </li>
   );
 }

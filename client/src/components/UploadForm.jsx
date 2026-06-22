@@ -14,6 +14,12 @@ export default function UploadForm({ onUpload }) {
   const handleSubmit = async () => {
     setError("");
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Please login first");
+      return;
+    }
+
     // Basic client-side validation (server validates too).
     if (!file) return setError("Please choose a file.");
     if (!description.trim()) return setError("Please add a description.");
@@ -21,6 +27,7 @@ export default function UploadForm({ onUpload }) {
     setLoading(true);
     try {
       const saved = await uploadResource(file, description.trim());
+      console.log("UPLOADED:", saved);
       onUpload(saved); // push to the global feed in App
 
       // Reset the form

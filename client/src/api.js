@@ -15,16 +15,56 @@ export const fetchResources = async () => {
  * Upload a file + description. Resolves to the saved resource object.
  */
 export const uploadResource = async (file, description) => {
+  const token = localStorage.getItem("token"); // 👈 get token
+
   const formData = new FormData();
-  formData.append("file", file); // must match upload.single("file") on the server
+  formData.append("file", file);
   formData.append("description", description);
 
-  const res = await fetch(`${BASE}/api/upload`, {
+  const res = await fetch(`/api/upload`, {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`, // 👈 SEND TOKEN
+    },
     body: formData,
   });
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Upload failed.");
   return data;
+};
+
+// REGISTER
+export const registerUser = async (data) => {
+  const res = await fetch(`${BASE}/api/auth/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message);
+  return result;
+};
+
+// LOGIN
+export const loginUser = async (data) => {
+  const res = await fetch(`${BASE}/api/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message);
+
+  // store token
+  localStorage.setItem("token", result.token);
+  localStorage.setItem("userId", result.user._id);
+
+  return result;
 };

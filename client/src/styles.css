@@ -1,9 +1,9 @@
 :root {
-  --bg: #faf8f3;          /* warm paper */
+  --bg: #faf8f3; /* warm paper */
   --card: #ffffff;
-  --text: #1c1b18;        /* near-black ink */
+  --text: #1c1b18; /* near-black ink */
   --muted: #7c766c;
-  --accent: #126e63;      /* deep teal */
+  --accent: #126e63; /* deep teal */
   --accent-hover: #0d544b;
   --accent-soft: #e7f1ef;
   --border: #e9e3d8;
@@ -19,7 +19,11 @@
 }
 
 body {
-  font-family: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Hanken Grotesk",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.55;
@@ -133,7 +137,9 @@ button,
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
 }
 button:hover:not(:disabled),
 .download-btn:hover {
@@ -243,4 +249,128 @@ button:disabled {
     align-self: stretch;
     text-align: center;
   }
+}
+/* ---------- Auth Page ---------- */
+
+.auth-page {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 0.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.auth-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.auth-subtitle {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Inputs */
+
+.auth-input {
+  width: 100%;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-bottom: 1.2rem;
+  background: #fdfcfa;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Password toggle */
+
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 0.6rem;
+  top: 0.55rem;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+/* Footer */
+
+.auth-footer {
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.auth-footer span {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+.auth-footer span:hover {
+  text-decoration: underline;
+}
+.toggle-btn:hover {
+  background: none !important;
+  transform: none !important;
+}
+/* ---------- Navbar ---------- */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.nav-user {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.nav-logout {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-logout:hover {
+  text-decoration: underline;
 }

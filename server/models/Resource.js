@@ -12,8 +12,13 @@ const resourceSchema = new mongoose.Schema(
     fileType: { type: String }, // MIME type, e.g. "application/pdf"
     fileSize: { type: Number }, // Size in bytes
     description: { type: String, required: true, trim: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
-  { timestamps: true } // automatically adds createdAt + updatedAt
+  { timestamps: true }, // automatically adds createdAt + updatedAt
 );
 
 export default mongoose.model("Resource", resourceSchema);

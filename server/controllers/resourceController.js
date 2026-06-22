@@ -41,6 +41,7 @@ export const uploadResource = async (req, res) => {
       fileType: req.file.mimetype,
       fileSize: req.file.size,
       description: req.body.description.trim(),
+      user: req.user.id,
     });
 
     // 3. Return the saved document so the frontend can render it instantly
@@ -57,7 +58,9 @@ export const uploadResource = async (req, res) => {
  */
 export const getResources = async (req, res) => {
   try {
-    const resources = await Resource.find().sort({ createdAt: -1 });
+    const resources = await Resource.find()
+      .populate("user", "name email")
+      .sort({ createdAt: -1 });
     res.status(200).json(resources);
   } catch (error) {
     console.error("Fetch error:", error.message);
@@ -82,6 +85,10 @@ export const deleteResource = async (req, res) => {
     const resource = await Resource.findById(id);
     if (!resource) {
       return res.status(404).json({ message: "Resource not found." });
+    }
+
+    if (resource.user.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
     }
 
     // Delete from Cloudinary

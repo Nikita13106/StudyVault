@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import UploadForm from "./components/UploadForm.jsx";
 import ResourceList from "./components/ResourceList.jsx";
 import { fetchResources } from "./api.js";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function App() {
   const [resources, setResources] = useState([]);
@@ -28,29 +31,49 @@ export default function App() {
     setResources((prev) => [resource, ...prev]);
   };
 
+  const handleDelete = (id) => {
+    setResources((prev) => prev.filter((r) => r._id !== id));
+  };
+
   return (
     <div className="app">
       <header className="header">
         <p className="eyebrow">Student Resource Sharing Hub</p>
         <h1>StudyVault</h1>
-        <p className="tagline">Share and discover academic resources — instantly.</p>
+        <p className="tagline">
+          Share and discover academic resources — instantly.
+        </p>
       </header>
 
       <main>
-        <UploadForm onUpload={handleNewResource} />
+        <Routes>
+          {/* Auth Pages */}
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        <section className="feed" aria-label="Uploaded resources">
-          <div className="feed-head">
-            <h2>Resources</h2>
-            {!loading && !error && (
-              <span className="count">{resources.length}</span>
-            )}
-          </div>
+          {/* Home Page */}
+          <Route
+            path="/resources"
+            element={
+              <>
+                <UploadForm onUpload={handleNewResource} />
 
-          {loading && <p className="muted">Loading resources…</p>}
-          {error && <p className="error">{error}</p>}
-          {!loading && !error && <ResourceList resources={resources} />}
-        </section>
+                <section className="feed">
+                  <div className="feed-head">
+                    <h2>Resources</h2>
+                    {!loading && !error && (
+                      <span className="count">{resources.length}</span>
+                    )}
+                  </div>
+
+                  {loading && <p>Loading resources…</p>}
+                  {error && <p className="error">{error}</p>}
+                  {!loading && !error && <ResourceList resources={resources} onDelete={handleDelete} />}
+                </section>
+              </>
+            }
+          />
+        </Routes>
       </main>
 
       <footer className="footer">

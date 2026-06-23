@@ -1,18 +1,52 @@
 # 📚 StudyVault - Student Resource Sharing Hub
 
-A minimal, production-quality full-stack app where students upload and download
-academic resources. Files are stored on **Cloudinary**, metadata in **MongoDB**,
-served by a **Node/Express** API and a clean **React (Vite)** frontend.
+A minimal, production-quality full-stack app where students upload, organize, and download academic resources. Files are stored on **Cloudinary**, metadata in **MongoDB**, served by a **Node/Express** API and a clean **React (Vite)** frontend.
 
----
+## [![Live Demo](https://img.shields.io/badge/Live%20Demo-StudyVault-blueviolet?style=for-the-badge)](https://studyvault-platform.vercel.app/)
 
 ## ✨ Features
 
-- **Upload** a file with a description → file goes to Cloudinary, metadata to MongoDB.
-- **Global feed** of resources, newest first, with one-click **download**.
-- New uploads appear **instantly** (no page refresh).
-- **Loading & error states** on upload and fetch.
-- Bonus: **file-type validation** (PDF / images / Word / PPT / TXT), **10 MB size limit**, subtle entry **animations**.
+- 📤 **Upload Resources**
+  Upload files with descriptions → stored securely on Cloudinary with metadata in MongoDB.
+
+- 🌍 **Global Resource Feed**
+  Browse all resources in a clean, responsive UI with instant updates.
+
+- 📥 **One-Click Download**
+  Files download directly (no preview issues) using optimized Cloudinary delivery.
+
+- ⚡ **Real-Time UI Updates**
+  New uploads and deletions reflect instantly without refresh.
+
+- 🔐 **Authentication System**
+  Secure login & registration with JWT-based authentication.
+
+- 👤 **User Dashboard (Your Uploads)**
+  View and manage your uploaded resources in one place.
+
+- 🔍 **Advanced Search & Filters**
+  Filter resources by:
+  - Year
+  - Semester
+  - Subject
+  - Modules
+
+- 🧩 **Smart Categorization**
+  Resources are structured for better navigation and discovery.
+
+- 📱 **Fully Responsive UI**
+  - Desktop → Hover actions
+  - Mobile → 3-dot menu with actions
+
+- 🛡 **Validation & Security**
+  - File type validation (PDF, Images, Docs, PPT, TXT)
+  - Max file size: 10MB
+  - Protected routes for uploads & deletion
+
+- 🎨 **Modern UI/UX**
+  - Tailwind CSS styling
+  - Smooth animations
+  - Clean, minimal design
 
 ---
 
@@ -21,34 +55,54 @@ served by a **Node/Express** API and a clean **React (Vite)** frontend.
 ```
 studyvault/
 ├── README.md
-├── server/                     # Node + Express + MongoDB + Cloudinary
-│   ├── server.js               # App entry, middleware, error handler
+├── server/
+│   ├── server.js
+│   ├── package.json
+│   ├── .gitignore
 │   ├── config/
-│   │   ├── db.js               # MongoDB connection
-│   │   └── cloudinary.js       # Cloudinary SDK config
+│   │   ├── db.js
+│   │   └── cloudinary.js
 │   ├── models/
-│   │   └── Resource.js         # Mongoose schema
+│   │   ├── Resource.js
+│   │   └── User.js
 │   ├── middleware/
-│   │   └── upload.js           # Multer (memory) + type/size validation
+│   │   ├── upload.js
+│   │   └── auth.js
 │   ├── controllers/
-│   │   └── resourceController.js  # upload + fetch logic
+│   │   ├── resourceController.js
+│   │   └── authController.js
 │   ├── routes/
-│   │   └── resources.js        # POST /upload, GET /resources
+│   │   ├── resources.js
+│   │   └── auth.js
 │   └── .env
 │
-└── client/                     # React (Vite)
-    ├── index.html              # Semantic HTML + SEO meta tags
-    ├── vite.config.js          # Dev proxy → backend
+└── client/
+    ├── index.html
+    ├── vite.config.js
     ├── .env
+    ├── .gitignore
+    ├── package.json
+    ├── postcss.config.js
+    ├── tailwind.config.js
     └── src/
+        ├── pages/
+        │   ├── Login.jsx
+        │   ├── Register.jsx
+        │   ├── Resources.jsx
+        │   └── Upload.jsx
+        ├── utils/
+        │   └── formatModule.js
         ├── main.jsx
-        ├── App.jsx             # State + data fetching
-        ├── api.js              # fetch helpers
+        ├── App.jsx
+        ├── api.js
+        ├── index.css
         ├── styles.css
         └── components/
             ├── UploadForm.jsx
             ├── ResourceList.jsx
-            └── ResourceCard.jsx
+            ├── ResourceCard.jsx
+            ├── Navbar.jsx
+            └── Footer.jsx
 ```
 
 ---
@@ -58,34 +112,66 @@ studyvault/
 ### Prerequisites
 
 - Node.js 18+
-- A MongoDB database (local, or free [MongoDB Atlas](https://www.mongodb.com/atlas))
-- A free [Cloudinary](https://cloudinary.com/) account
+- MongoDB (Local or Atlas)
+- Cloudinary Account
 
-### 1. Backend
+---
+
+### 1. Backend Setup
 
 ```bash
 cd server
 npm install
-npm start               # starts on http://localhost:5000
+npm start
 ```
 
-Fill `.env` with your credentials:
+Create `.env`:
 
-### 2. Frontend
+```
+PORT=5000
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_secret_key
+
+CLOUDINARY_CLOUD_NAME=your_name
+CLOUDINARY_API_KEY=your_key
+CLOUDINARY_API_SECRET=your_secret
+```
+
+---
+
+### 2. Frontend Setup
 
 ```bash
 cd client
 npm install
-npm run dev               # starts on http://localhost:5173
+npm run dev
 ```
-
-Open **http://localhost:5173** — the Vite dev server proxies `/api` calls to the
-backend, so no extra config is needed locally.
 
 ---
 
 ## 🧱 Tech Stack
 
-React (Vite) · Node.js · Express · MongoDB (Mongoose) · Cloudinary · Multer
+- **Frontend:** React (Vite), Tailwind CSS
+- **Backend:** Node.js, Express
+- **Database:** MongoDB (Mongoose)
+- **Storage:** Cloudinary
+- **Auth:** JWT
+- **Upload Handling:** Multer
 
 ---
+
+## 📌 Highlights
+
+- Clean scalable architecture (MERN)
+- Real-world features (auth, filtering, dashboard)
+- Production-ready deployment (Vercel + backend)
+- Strong UI/UX focus
+
+---
+
+## 💡 Future Scope
+
+- Bookmark / Save resources
+- Comments & discussions
+- Admin panel
+- Analytics dashboard

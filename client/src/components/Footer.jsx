@@ -37,11 +37,7 @@ export default function Footer() {
                     Upload
                   </a>
                 </li>
-                <li>
-                  <a href="/" className="text-gray-600 hover:text-emerald-600 transition">
-                    Login
-                  </a>
-                </li>
+
               </ul>
             </div>
 

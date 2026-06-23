@@ -22,13 +22,60 @@ const streamUpload = (buffer) =>
  */
 export const uploadResource = async (req, res) => {
   try {
+    console.log(req.body);
+    const {
+      description,
+      year,
+      semester,
+      branch,
+      subject,
+      module,
+      category,
+      qbYear,
+      otherCategory,
+    } = req.body;
+
     // Validate inputs
     if (!req.file) {
       return res.status(400).json({ message: "No file provided." });
     }
-    if (!req.body.description?.trim()) {
-      return res.status(400).json({ message: "Description is required." });
+
+    let moduleArray = [];
+
+    if (module) {
+      if (Array.isArray(module)) {
+        moduleArray = module.map(Number);
+      } else if (typeof module === "string") {
+        moduleArray = module
+          .split(",")
+          .map((m) => Number(m.trim()))
+          .filter((m) => !isNaN(m));
+      }
     }
+
+    // ✅ Validate required fields
+    if (!year || !semester || !branch || !subject || !category || moduleArray.length === 0) {
+      return res.status(400).json({
+        message: "All fields are required.",
+      });
+    }
+
+    // ✅ Extra validation for conditional fields
+    if (category === "qb" && !qbYear) {
+      return res.status(400).json({
+        message: "QB year is required for Question Bank.",
+      });
+    }
+
+    if (category === "other" && !otherCategory?.trim()) {
+      return res.status(400).json({
+        message: "Please specify the category.",
+      });
+    }
+
+    // if (!req.body.description?.trim()) {
+    //   return res.status(400).json({ message: "Description is required." });
+    // }
 
     // 1. Upload the in-memory buffer to Cloudinary
     const result = await streamUpload(req.file.buffer);
@@ -40,12 +87,25 @@ export const uploadResource = async (req, res) => {
       fileName: req.file.originalname,
       fileType: req.file.mimetype,
       fileSize: req.file.size,
-      description: req.body.description.trim(),
+      description: description?.trim() || null,
       user: req.user.id,
+      year,
+      semester,
+      branch,
+      subject,
+      module: moduleArray,
+      category,
+      qbYear: category === "qb" ? qbYear : null,
+      otherCategory: category === "other" ? otherCategory : null,
     });
 
+    const populated = await Resource.findById(resource._id).populate(
+      "user",
+      "name email",
+    );
+
     // 3. Return the saved document so the frontend can render it instantly
-    res.status(201).json(resource);
+    res.status(201).json(populated);
   } catch (error) {
     console.error("Upload error:", error.message);
     res.status(500).json({ message: "Upload failed. Please try again." });

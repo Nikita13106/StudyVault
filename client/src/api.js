@@ -14,24 +14,37 @@ export const fetchResources = async () => {
 /**
  * Upload a file + description. Resolves to the saved resource object.
  */
-export const uploadResource = async (file, description) => {
-  const token = localStorage.getItem("token"); // 👈 get token
+export const uploadResource = async (data) => {
+  const token = localStorage.getItem("token");
 
   const formData = new FormData();
-  formData.append("file", file);
-  formData.append("description", description);
 
-  const res = await fetch(`/api/upload`, {
+  formData.append("file", data.file);
+  formData.append("description", data.description || "");
+  formData.append("year", data.year);
+  formData.append("semester", data.semester);
+  formData.append("branch", data.branch);
+  formData.append("subject", data.subject);
+  formData.append("category", data.category);
+  formData.append("qbYear", data.qbYear || "");
+  formData.append("otherCategory", data.otherCategory || "");
+
+  data.module.forEach((m) => {
+    formData.append("module", m);
+  });
+
+  const res = await fetch(`${BASE}/api/upload`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${token}`, // 👈 SEND TOKEN
+      Authorization: `Bearer ${token}`,
     },
     body: formData,
   });
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Upload failed.");
-  return data;
+  const result = await res.json(); // ✅ renamed
+  if (!res.ok) throw new Error(result.message || "Upload failed.");
+
+  return result;
 };
 
 // REGISTER

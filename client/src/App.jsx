@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
-import UploadForm from "./components/UploadForm.jsx";
-import ResourceList from "./components/ResourceList.jsx";
+import { Routes, Route } from "react-router-dom";
+
 import { fetchResources } from "./api.js";
+
+import Navbar from "./components/Navbar.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Resources from "./pages/Resources.jsx";
+import Upload from "./pages/Upload.jsx";
+import Footer from "./components/Footer.jsx";
 
 export default function App() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Load resources once when the app mounts.
+  // Fetch resources
   useEffect(() => {
     (async () => {
       try {
@@ -25,60 +29,46 @@ export default function App() {
     })();
   }, []);
 
-  // Called by UploadForm after a successful upload.
-  // Prepends the new resource so it shows instantly without a re-fetch.
+  // After upload
   const handleNewResource = (resource) => {
     setResources((prev) => [resource, ...prev]);
   };
 
+  // After delete
   const handleDelete = (id) => {
     setResources((prev) => prev.filter((r) => r._id !== id));
   };
 
   return (
     <div className="app">
-      <header className="header">
-        <p className="eyebrow">Student Resource Sharing Hub</p>
-        <h1>StudyVault</h1>
-        <p className="tagline">
-          Share and discover academic resources — instantly.
-        </p>
-      </header>
+      <Navbar />
 
-      <main>
+      <main className="max-w-6xl mx-auto px-4 py-6">
         <Routes>
-          {/* Auth Pages */}
+          {/* Auth */}
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Home Page */}
+          {/* Pages */}
           <Route
             path="/resources"
             element={
-              <>
-                <UploadForm onUpload={handleNewResource} />
-
-                <section className="feed">
-                  <div className="feed-head">
-                    <h2>Resources</h2>
-                    {!loading && !error && (
-                      <span className="count">{resources.length}</span>
-                    )}
-                  </div>
-
-                  {loading && <p>Loading resources…</p>}
-                  {error && <p className="error">{error}</p>}
-                  {!loading && !error && <ResourceList resources={resources} onDelete={handleDelete} />}
-                </section>
-              </>
+              <Resources
+                resources={resources}
+                loading={loading}
+                error={error}
+                onDelete={handleDelete}
+              />
             }
+          />
+
+          <Route
+            path="/upload"
+            element={<Upload onUpload={handleNewResource} />}
           />
         </Routes>
       </main>
-
-      <footer className="footer">
-        <p>Built with React · Node · MongoDB · Cloudinary</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

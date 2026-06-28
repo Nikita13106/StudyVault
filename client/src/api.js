@@ -81,3 +81,21 @@ export const loginUser = async (data) => {
 
   return result;
 };
+/**
+ * Upvote / remove upvote for a resource
+ */
+export const upvoteResource = async (id) => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${BASE}/api/resources/${id}/upvote`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Upvote failed");
+
+  return result;
+};

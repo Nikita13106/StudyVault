@@ -8,6 +8,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Resources from "./pages/Resources.jsx";
 import Upload from "./pages/Upload.jsx";
+import MyUploads from "./pages/MyUploads";
 import Footer from "./components/Footer.jsx";
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
   const handleNewResource = (resource) => {
     setResources((prev) => [resource, ...prev]);
   };
+  
 
   // After delete
   const handleDelete = (id) => {
@@ -49,9 +51,9 @@ export default function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Pages */}
+          {/* Resources */}
           <Route
-            path="/resources"
+           path="/resources"
             element={
               <Resources
                 resources={resources}
@@ -66,6 +68,12 @@ export default function App() {
             path="/upload"
             element={<Upload onUpload={handleNewResource} />}
           />
+
+           {/* My Uploads */}
+        <Route
+          path="/my-uploads"
+          element={<MyUploads resources={resources} />}
+        />
         </Routes>
       </main>
       <Footer />

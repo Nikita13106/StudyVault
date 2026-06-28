@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
+
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,6 +48,12 @@ export default function Navbar() {
             className="text-gray-700 hover:text-teal-600 font-medium"
           >
             Upload
+          </Link>
+          <Link
+            to="/my-uploads"
+            className="text-gray-700 hover:text-teal-600 font-medium"
+          >
+            My Uploads
           </Link>
 
           {!isLoggedIn ? (
@@ -105,6 +112,13 @@ export default function Navbar() {
             className="block text-gray-700 hover:text-teal-600"
           >
             Upload
+          </Link>
+          <Link
+            to="/my-uploads"
+            onClick={() => setMenuOpen(false)}
+            className="block text-gray-700 hover:text-teal-600"
+          >
+            My Uploads
           </Link>
 
           {!isLoggedIn ? (

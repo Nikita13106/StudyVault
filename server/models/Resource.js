@@ -53,34 +53,6 @@ const resourceSchema = new mongoose.Schema(
     otherCategory: {
       type: String, // only if category = other
     },
-
-    // Users who have upvoted this resource
-    upvotes: [
-    {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    },
-    ],
-
-// Comments on this resource
-comments: [
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    text: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-],
   },
   { timestamps: true }, // automatically adds createdAt + updatedAt
 );

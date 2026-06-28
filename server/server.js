@@ -8,8 +8,6 @@ import authRoutes from "./routes/auth.js";
 
 // Load environment variables before anything else uses them.
 dotenv.config();
-
-
 // Connect to MongoDB.
 connectDB();
 

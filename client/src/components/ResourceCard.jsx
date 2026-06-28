@@ -1,19 +1,16 @@
 import { formatModules } from "../utils/formatModule";
 import { Eye, Download, Trash2, MoreVertical } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { upvoteResource } from "../api";
 
-// Convert bytes to a human-readable size.
+// Convert bytes to readable size
 const formatSize = (bytes) => {
   if (!bytes) return "";
   const kb = bytes / 1024;
   return kb < 1024 ? `${kb.toFixed(0)} KB` : `${(kb / 1024).toFixed(1)} MB`;
 };
 
-/**
- * Insert Cloudinary's `fl_attachment` flag so the link forces a download
- * (with the original filename) instead of opening in the browser.
- * Falls back to the plain URL if the pattern isn't found.
- */
+// Cloudinary download helper
 const toDownloadUrl = (url) =>
   url.includes("/upload/")
     ? url.replace("/upload/", "/upload/fl_attachment/")
@@ -24,8 +21,21 @@ export default function ResourceCard({ resource, onDelete }) {
     resource;
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [upvotes, setUpvotes] = useState(resource.upvotes?.length || 0);
+
   const menuRef = useRef(null);
 
+  // UPVOTE HANDLER
+  const handleUpvote = async () => {
+    try {
+      const updated = await upvoteResource(_id);
+      setUpvotes(updated.upvotes.length);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // DELETE
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
 
@@ -59,9 +69,9 @@ export default function ResourceCard({ resource, onDelete }) {
 
   return (
     <li className="group w-full bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition p-5 sm:p-6 flex flex-col gap-4">
+      
       {/* HEADER */}
       <div className="flex items-start justify-between gap-4">
-        {/* LEFT */}
         <div className="flex-1 space-y-2">
           {description && (
             <p className="text-base sm:text-lg font-medium text-gray-800 leading-snug">
@@ -105,7 +115,7 @@ export default function ResourceCard({ resource, onDelete }) {
           )}
         </div>
 
-        {/* MOBILE 3 DOT MENU */}
+        {/* MOBILE MENU */}
         <div className="sm:hidden relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
@@ -130,9 +140,10 @@ export default function ResourceCard({ resource, onDelete }) {
                 href={toDownloadUrl(fileUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs text-white bg-blue-500 hover:bg-blue-600"
+                className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50"
               >
-                <Download size={14} /> Download
+                <Download size={16} />
+                Download
               </a>
 
               {user?._id === localStorage.getItem("userId") && (
@@ -168,6 +179,7 @@ export default function ResourceCard({ resource, onDelete }) {
             {resource.subject}
           </span>
         )}
+
         {resource.module?.length > 0 && (
           <span className="px-2.5 py-1 text-xs rounded-full bg-indigo-50 text-indigo-700">
             {formatModules(resource.module)}
@@ -175,10 +187,23 @@ export default function ResourceCard({ resource, onDelete }) {
         )}
       </div>
 
-      {/* FOOTER */}
-      <div className="flex justify-between text-xs text-gray-500 border-t pt-3">
+      {/* FOOTER (UPVOTE ADDED HERE) */}
+      <div className="flex justify-between items-center text-xs text-gray-500 border-t pt-3">
+        
         <span>Uploaded by : {user?.name || "Unknown"}</span>
-        <span>{new Date(createdAt).toLocaleDateString()}</span>
+
+        <div className="flex items-center gap-3">
+          
+          {/* UPVOTE BUTTON */}
+          <button
+            onClick={handleUpvote}
+            className="flex items-center gap-1 px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200"
+          >
+            👍 {upvotes}
+          </button>
+
+          <span>{new Date(createdAt).toLocaleDateString()}</span>
+        </div>
       </div>
     </li>
   );
